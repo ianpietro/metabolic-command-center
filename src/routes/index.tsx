@@ -43,7 +43,7 @@ function Dashboard() {
             <div className="absolute inset-0 grid-bg pointer-events-none" />
             <div className="relative">
               <div className="flex items-center justify-between mb-2">
-                <span className="micro-label" style={{ color: "var(--neon)" }}>PREDITOR DE CRISE</span>
+                <span className="micro-label" style={{ color: "var(--neon)" }}>PREDITOR DE CRISE - está funcionando babaca.</span>
                 <span className="micro-label inline-flex items-center gap-1.5" style={{ color: "var(--neon)" }}>
                   <span className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ background: "var(--neon)" }} />
                   ATIVO

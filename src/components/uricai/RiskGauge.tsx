@@ -120,20 +120,20 @@ export function RiskGauge({ value, band, size = 280 }: Props) {
         </text>
       </svg>
 
-      {/* center readout — abaixo do arco, sem sobreposição */}
+      {/* center readout — posicionado abaixo do arco semicircular */}
       <div
         className="pointer-events-none absolute inset-x-0 flex flex-col items-center"
-        style={{ top: cy - size * 0.18 }}
+        style={{ top: cy + 8 }}
       >
         <span className="micro-label" style={{ color: "var(--neon)" }}>RISCO 12H</span>
         <span
-          className="data-num font-semibold leading-none mt-1"
-          style={{ color, fontSize: size * 0.18 }}
+          className="data-num font-semibold leading-none mt-2"
+          style={{ color, fontSize: size * 0.22 }}
         >
           {v.toString().padStart(2, "0")}
         </span>
         <span
-          className="font-mono text-[11px] tracking-[0.18em] mt-1.5"
+          className="font-mono text-[11px] tracking-[0.18em] mt-2"
           style={{ color }}
         >
           {band}

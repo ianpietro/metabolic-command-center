@@ -1,0 +1,7 @@
+name = "metabolic-command-center"
+compatibility_date = "2024-04-01"
+compatibility_flags = ["nodejs_compat"]
+main = "dist/server/index.js"
+
+[site]
+bucket = "dist/client"

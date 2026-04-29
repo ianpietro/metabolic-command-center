@@ -1,9 +1,10 @@
-import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { Outlet, Link, createRootRoute, HeadContent, Scripts, useNavigate, useRouterState } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
 import { HeaderBar } from "@/components/uricai/HeaderBar";
 import { MetabolicNav } from "@/components/uricai/MetabolicNav";
 import { StoreReady } from "@/components/uricai/StoreReady";
+import { AuthProvider, useAuth } from "@/components/uricai/AuthProvider";
 
 function NotFoundComponent() {
   return (
@@ -78,14 +79,38 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   return (
-    <StoreReady>
-      <div className="min-h-screen pb-28 md:pb-32">
-        <HeaderBar />
-        <main className="mx-auto max-w-[1200px] px-4 md:px-8 py-6 md:py-10">
-          <Outlet />
-        </main>
-        <MetabolicNav />
-      </div>
-    </StoreReady>
+    <AuthProvider>
+      <StoreReady>
+        <AppContent />
+      </StoreReady>
+    </AuthProvider>
+  );
+}
+
+function AppContent() {
+  const { session } = useAuth();
+  const routerState = useRouterState();
+  const navigate = useNavigate();
+
+  const isAuthPage = routerState.location.pathname === "/auth";
+
+  if (!session && !isAuthPage) {
+    navigate({ to: "/auth" });
+    return null;
+  }
+
+  // Se for a página de login, não mostramos os headers e menus
+  if (isAuthPage) {
+    return <Outlet />;
+  }
+
+  return (
+    <div className="min-h-screen pb-28 md:pb-32">
+      <HeaderBar />
+      <main className="mx-auto max-w-[1200px] px-4 md:px-8 py-6 md:py-10">
+        <Outlet />
+      </main>
+      <MetabolicNav />
+    </div>
   );
 }

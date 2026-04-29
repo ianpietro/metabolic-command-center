@@ -100,6 +100,11 @@
   --warn: oklch(0.78 0.16 70);             /* #F59E0B amber */
   --crit: oklch(0.66 0.22 25);             /* #EF4444 red */
 
+  /* Neon blue — acento futurista (UI / chrome / micro-labels ativos) */
+  --neon: oklch(0.78 0.18 230);            /* azul neon ciano-elétrico */
+  --neon-soft: oklch(0.78 0.18 230 / 0.15);
+  --color-neon: var(--neon);
+
   --destructive: oklch(0.66 0.22 25);
   --destructive-foreground: oklch(0.97 0.005 250);
 

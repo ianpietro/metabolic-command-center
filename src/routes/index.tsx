@@ -43,30 +43,35 @@ function Dashboard() {
             <div className="absolute inset-0 grid-bg pointer-events-none" />
             <div className="relative">
               <div className="flex items-center justify-between mb-2">
-                <span className="micro-label">GOUT CRISIS PREDICTOR</span>
-                <span className="micro-label" style={{ color: "var(--safe)" }}>● ATIVO</span>
+                <span className="micro-label" style={{ color: "var(--neon)" }}>PREDITOR DE CRISE</span>
+                <span className="micro-label inline-flex items-center gap-1.5" style={{ color: "var(--neon)" }}>
+                  <span className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ background: "var(--neon)" }} />
+                  ATIVO
+                </span>
               </div>
               <div className="flex flex-col items-center">
                 <RiskGauge value={risk.score} band={risk.band} size={300} />
               </div>
-              <ul className="mt-2 space-y-1">
-                {risk.drivers.slice(0, 3).map((d, i) => (
-                  <li key={i} className="font-mono text-[12px] text-[var(--muted-foreground)] flex items-center gap-2">
-                    <span
-                      className="h-1.5 w-1.5 rounded-full"
-                      style={{
-                        background:
-                          d.severity === "crit"
-                            ? "var(--crit)"
-                            : d.severity === "warn"
-                            ? "var(--warn)"
-                            : "var(--safe)",
-                      }}
-                    />
-                    {d.label}
-                  </li>
-                ))}
-              </ul>
+              {risk.drivers.length > 0 && (
+                <ul className="mt-3 space-y-1">
+                  {risk.drivers.slice(0, 2).map((d, i) => (
+                    <li key={i} className="font-mono text-[12px] text-[var(--muted-foreground)] flex items-center gap-2">
+                      <span
+                        className="h-1.5 w-1.5 rounded-full"
+                        style={{
+                          background:
+                            d.severity === "crit"
+                              ? "var(--crit)"
+                              : d.severity === "warn"
+                                ? "var(--warn)"
+                                : "var(--safe)",
+                        }}
+                      />
+                      {d.label}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </div>
         </div>
@@ -96,18 +101,22 @@ function Dashboard() {
         </div>
       </section>
 
-      {/* SUPABASE LIVE PROBE */}
-      <section>
-        <FoodScienceList />
-      </section>
-
       {/* CORRECTION CHART */}
       <section>
         <HydrationVsRiskChart logs={logs} />
-        <p className="mt-2 font-mono text-[11px] text-[var(--muted-foreground)] max-w-[65ch]">
-          &gt; Leitura: queda no volume hídrico nas últimas horas correlaciona com elevação do score.
-          Manter ingestão regular reduz a saturação plasmática de urato.
-        </p>
+      </section>
+
+      {/* SUPABASE DIAGNOSTIC — colapsado por padrão */}
+      <section>
+        <details className="glass rounded-xl">
+          <summary className="cursor-pointer px-4 py-3 micro-label flex items-center justify-between list-none">
+            <span style={{ color: "var(--neon)" }}>◆ DIAGNÓSTICO DE CONEXÃO</span>
+            <span className="text-[var(--muted-foreground)]">expandir</span>
+          </summary>
+          <div className="px-4 pb-4">
+            <FoodScienceList />
+          </div>
+        </details>
       </section>
     </div>
   );

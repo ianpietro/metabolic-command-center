@@ -9,6 +9,7 @@ import { ExcretionWindow } from "@/components/uricai/ExcretionWindow";
 import { KpiStrip } from "@/components/uricai/KpiStrip";
 import { TelemetryFeed } from "@/components/uricai/TelemetryFeed";
 import { HydrationVsRiskChart, RiskForecastChart } from "@/components/uricai/Charts";
+import { FoodScienceList } from "@/components/uricai/FoodScienceList";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -93,6 +94,11 @@ function Dashboard() {
         <div className="lg:col-span-5">
           <TelemetryFeed />
         </div>
+      </section>
+
+      {/* SUPABASE LIVE PROBE */}
+      <section>
+        <FoodScienceList />
       </section>
 
       {/* CORRECTION CHART */}

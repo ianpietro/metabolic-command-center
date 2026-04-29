@@ -94,10 +94,10 @@ function AppContent() {
 
   const isAuthPage = routerState.location.pathname === "/auth";
 
-  if (!session && !isAuthPage) {
-    navigate({ to: "/auth" });
-    return null;
-  }
+  // if (!session && !isAuthPage) {
+  //   navigate({ to: "/auth" });
+  //   return null;
+  // }
 
   // Se for a página de login, não mostramos os headers e menus
   if (isAuthPage) {

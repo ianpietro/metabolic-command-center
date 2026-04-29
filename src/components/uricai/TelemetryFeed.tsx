@@ -24,17 +24,17 @@ export function TelemetryFeed() {
   return (
     <div className="glass rounded-md overflow-hidden">
       <div className="flex items-center justify-between px-3 py-2 border-b border-[var(--line)]">
-        <span className="micro-label">TELEMETRY FEED</span>
+        <span className="micro-label">DIAGNÓSTICO EM TEMPO REAL</span>
         <span className="flex items-center gap-1.5">
-          <span className="h-1.5 w-1.5 rounded-full bg-[var(--safe)] animate-pulse" />
-          <span className="micro-label" style={{ color: "var(--safe)" }}>LIVE</span>
+          <span className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ background: "var(--neon)" }} />
+          <span className="micro-label" style={{ color: "var(--neon)" }}>AO VIVO</span>
         </span>
       </div>
       <div className="relative h-32 overflow-hidden font-mono text-[11px] leading-relaxed text-[var(--muted-foreground)] px-3 py-2">
         <div className="ticker">
           {[...LINES, ...LINES].map((l, i) => (
             <div key={i} className="whitespace-nowrap">
-              <span className="text-[var(--safe)]">{String((tick + i) % 99).padStart(2, "0")}</span>{" "}
+              <span style={{ color: "var(--neon)" }}>{String((tick + i) % 99).padStart(2, "0")}</span>{" "}
               {l}
             </div>
           ))}

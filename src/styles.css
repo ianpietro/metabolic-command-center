@@ -100,6 +100,11 @@
   --warn: oklch(0.78 0.16 70);             /* #F59E0B amber */
   --crit: oklch(0.66 0.22 25);             /* #EF4444 red */
 
+  /* Neon blue — acento futurista (UI / chrome / micro-labels ativos) */
+  --neon: oklch(0.78 0.18 230);            /* azul neon ciano-elétrico */
+  --neon-soft: oklch(0.78 0.18 230 / 0.15);
+  --color-neon: var(--neon);
+
   --destructive: oklch(0.66 0.22 25);
   --destructive-foreground: oklch(0.97 0.005 250);
 
@@ -156,12 +161,12 @@
     background-image:
       radial-gradient(
         circle at 15% 0%,
-        oklch(0.28 0.05 200 / 0.15),
+        oklch(0.78 0.18 230 / 0.18),
         transparent 45%
       ),
       radial-gradient(
         circle at 85% 100%,
-        oklch(0.28 0.04 280 / 0.12),
+        oklch(0.72 0.16 162 / 0.10),
         transparent 50%
       );
     background-attachment: fixed;

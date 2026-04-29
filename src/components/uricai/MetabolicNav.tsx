@@ -4,7 +4,7 @@ import { Crosshair, FilePlus2, Activity, User } from "lucide-react";
 
 const NAV = [
   { to: "/", label: "DASHBOARD", icon: Crosshair },
-  { to: "/log", label: "LOG", icon: FilePlus2 },
+  { to: "/log", label: "REGISTROS", icon: FilePlus2 },
   { to: "/tendencias", label: "TENDÊNCIAS", icon: Activity },
   { to: "/perfil", label: "PERFIL", icon: User },
 ] as const;

@@ -8,9 +8,9 @@ import { Beef, Droplet, Activity, Pill, Stethoscope } from "lucide-react";
 export const Route = createFileRoute("/log")({
   head: () => ({
     meta: [
-      { title: "Log Rápido — UricAI" },
+      { title: "Registros — UricAI" },
       { name: "description", content: "Registre alimentos, hidratação, sintomas, atividade física e medicações para alimentar a engine de risco." },
-      { property: "og:title", content: "Log Rápido — UricAI" },
+      { property: "og:title", content: "Registros — UricAI" },
       { property: "og:description", content: "Registre vetores metabólicos." },
     ],
   }),
@@ -62,7 +62,7 @@ function LogPage() {
     <div className="space-y-5 max-w-3xl mx-auto fade-up">
       <header>
         <span className="micro-label">REGISTRO DE TELEMETRIA</span>
-        <h1 className="mt-1 text-2xl md:text-3xl font-semibold tracking-tight">Log Rápido</h1>
+        <h1 className="mt-1 text-2xl md:text-3xl font-semibold tracking-tight">Adicionar Registros</h1>
         <p className="mt-1 font-mono text-[12px] text-[var(--muted-foreground)]">
           &gt; Selecione os itens, revise e depois confirme o envio.
         </p>

@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMetabolic } from "@/lib/storage";
 import { engine } from "@/lib/metabolic/adapter";
 import { RiskGauge } from "@/components/uricai/RiskGauge";
-import { CommandBar } from "@/components/uricai/CommandBar";
+
 import { PreventiveActionCard } from "@/components/uricai/PreventiveActionCard";
 import { ExcretionWindow } from "@/components/uricai/ExcretionWindow";
 import { KpiStrip } from "@/components/uricai/KpiStrip";
@@ -78,7 +78,7 @@ function Dashboard() {
 
         {/* Right column: Command bar + excretion + forecast */}
         <div className="lg:col-span-7 space-y-4">
-          <CommandBar />
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <ExcretionWindow hoursLeft={risk.excretionHoursLeft} severity={severity as any} />
             <RiskForecastChart forecast={risk.forecast} />

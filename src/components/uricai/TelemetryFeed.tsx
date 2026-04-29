@@ -34,7 +34,7 @@ export function TelemetryFeed() {
         <div className="ticker">
           {[...LINES, ...LINES].map((l, i) => (
             <div key={i} className="whitespace-nowrap">
-              <span className="text-[var(--safe)]">{String((tick + i) % 99).padStart(2, "0")}</span>{" "}
+              <span style={{ color: "var(--neon)" }}>{String((tick + i) % 99).padStart(2, "0")}</span>{" "}
               {l}
             </div>
           ))}

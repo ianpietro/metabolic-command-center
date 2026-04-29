@@ -1,11 +1,12 @@
 import * as React from "react";
 import { Link, useLocation } from "@tanstack/react-router";
-import { Crosshair, FilePlus2, Activity, User } from "lucide-react";
+import { Activity, Plus, BarChart2, Beaker, User } from "lucide-react";
 
 const NAV = [
-  { to: "/", label: "DASHBOARD", icon: Crosshair },
-  { to: "/log", label: "REGISTROS", icon: FilePlus2 },
-  { to: "/tendencias", label: "TENDÊNCIAS", icon: Activity },
+  { to: "/", label: "STATUS", icon: Activity },
+  { to: "/metricas", label: "MÉTRICAS", icon: BarChart2 },
+  { to: "/log", label: "ADICIONAR", icon: Plus, isPrimary: true },
+  { to: "/simulador", label: "SIMULADOR", icon: Beaker },
   { to: "/perfil", label: "PERFIL", icon: User },
 ] as const;
 
@@ -21,20 +22,24 @@ export function MetabolicNav() {
           const active = location.pathname === item.to;
           const Icon = item.icon;
           return (
-            <li key={item.to}>
+            <li key={item.to} className={item.isPrimary ? "relative -top-4 md:top-0" : ""}>
               <Link
                 to={item.to}
                 aria-current={active ? "page" : undefined}
                 className={[
-                  "group flex flex-col items-center gap-1 px-4 py-2.5 md:flex-row md:px-4 md:py-2 md:rounded-full transition-colors",
-                  active
-                    ? "text-[var(--foreground)]"
-                    : "text-[var(--muted-foreground)] hover:text-[var(--foreground)]",
+                  "group flex flex-col items-center gap-1 md:flex-row transition-all",
+                  item.isPrimary
+                    ? "bg-[var(--safe)] text-black p-3 md:px-5 md:py-2 rounded-full shadow-[0_4px_15px_rgba(45,212,191,0.4)] hover:scale-105"
+                    : "px-2 py-2.5 md:px-4 md:py-2 md:rounded-full",
+                  !item.isPrimary && active ? "text-[var(--foreground)]" : "",
+                  !item.isPrimary && !active ? "text-[var(--muted-foreground)] hover:text-[var(--foreground)]" : "",
                 ].join(" ")}
               >
-                <Icon size={18} strokeWidth={1.6} />
-                <span className="font-mono text-[10px] tracking-[0.18em] md:text-[11px]">{item.label}</span>
-                {active && (
+                <Icon size={item.isPrimary ? 24 : 20} strokeWidth={item.isPrimary ? 2.5 : 1.6} />
+                <span className={["font-mono tracking-[0.15em] md:text-[11px]", item.isPrimary ? "hidden md:inline-block font-bold" : "text-[9px]"].join(" ")}>
+                  {item.label}
+                </span>
+                {!item.isPrimary && active && (
                   <span className="hidden md:inline-block ml-1 h-1.5 w-1.5 rounded-full bg-[var(--safe)] shadow-[0_0_8px_var(--safe)]" />
                 )}
               </Link>

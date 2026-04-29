@@ -6,10 +6,7 @@ import { RiskGauge } from "@/components/uricai/RiskGauge";
 
 import { PreventiveActionCard } from "@/components/uricai/PreventiveActionCard";
 import { ExcretionWindow } from "@/components/uricai/ExcretionWindow";
-import { KpiStrip } from "@/components/uricai/KpiStrip";
-import { TelemetryFeed } from "@/components/uricai/TelemetryFeed";
-import { HydrationVsRiskChart, RiskForecastChart } from "@/components/uricai/Charts";
-import { FoodScienceList } from "@/components/uricai/FoodScienceList";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -34,89 +31,47 @@ function Dashboard() {
     risk.band === "CRITICO" ? "crit" : risk.band === "ALTO" ? "crit" : risk.band === "MEDIO" ? "warn" : "safe";
 
   return (
-    <div className="space-y-6 fade-up">
-      {/* HERO STRIP */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6">
-        {/* Gauge */}
-        <div className="lg:col-span-5">
-          <div className={["glass relative rounded-xl p-4 md:p-6 overflow-hidden", risk.band === "CRITICO" ? "pulse-crit" : ""].join(" ")}>
-            <div className="absolute inset-0 grid-bg pointer-events-none" />
-            <div className="relative">
-              <div className="flex items-center justify-between mb-2">
-                <span className="micro-label" style={{ color: "var(--neon)" }}>PREDITOR DE CRISE</span>
-                <span className="micro-label inline-flex items-center gap-1.5" style={{ color: "var(--neon)" }}>
-                  <span className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ background: "var(--neon)" }} />
-                  ATIVO
-                </span>
-              </div>
-              <div className="flex flex-col items-center">
-                <RiskGauge value={risk.score} band={risk.band} size={300} />
-              </div>
-              {risk.drivers.length > 0 && (
-                <ul className="mt-3 space-y-1">
-                  {risk.drivers.slice(0, 2).map((d, i) => (
-                    <li key={i} className="font-mono text-[12px] text-[var(--muted-foreground)] flex items-center gap-2">
-                      <span
-                        className="h-1.5 w-1.5 rounded-full"
-                        style={{
-                          background:
-                            d.severity === "crit"
-                              ? "var(--crit)"
-                              : d.severity === "warn"
-                                ? "var(--warn)"
-                                : "var(--safe)",
-                        }}
-                      />
-                      {d.label}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+    <div className="space-y-6 fade-up max-w-4xl mx-auto">
+      <header className="text-center mb-8">
+        <span className="micro-label" style={{ color: "var(--neon)" }}>MONITORAMENTO AO VIVO</span>
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight">Status Atual</h1>
+      </header>
+
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
+        {/* Painel Esquerdo: Risco */}
+        <div className={["glass flex flex-col justify-center items-center rounded-xl p-6 overflow-hidden relative", risk.band === "CRITICO" ? "pulse-crit" : ""].join(" ")}>
+          <div className="absolute inset-0 grid-bg pointer-events-none" />
+          <div className="relative z-10 flex flex-col items-center">
+            <RiskGauge value={risk.score} band={risk.band} size={280} />
+            
+            {risk.drivers.length > 0 && (
+              <ul className="mt-6 w-full space-y-2">
+                {risk.drivers.slice(0, 3).map((d, i) => (
+                  <li key={i} className="font-mono text-[12px] text-[var(--muted-foreground)] flex items-center justify-center gap-2">
+                    <span
+                      className="h-1.5 w-1.5 rounded-full"
+                      style={{
+                        background:
+                          d.severity === "crit"
+                            ? "var(--crit)"
+                            : d.severity === "warn"
+                              ? "var(--warn)"
+                              : "var(--safe)",
+                      }}
+                    />
+                    {d.label}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
 
-        {/* Right column: Command bar + excretion + forecast */}
-        <div className="lg:col-span-7 space-y-4">
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <ExcretionWindow hoursLeft={risk.excretionHoursLeft} severity={severity as any} />
-            <RiskForecastChart forecast={risk.forecast} />
-          </div>
-        </div>
-      </section>
-
-      {/* KPI STRIP */}
-      <section>
-        <KpiStrip logs={logs} profile={profile} />
-      </section>
-
-      {/* PREVENTIVE ACTION + TELEMETRY */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6">
-        <div className="lg:col-span-7">
+        {/* Painel Direito: Ações */}
+        <div className="flex flex-col gap-4 lg:gap-6 justify-center">
+          <ExcretionWindow hoursLeft={risk.excretionHoursLeft} severity={severity as any} />
           <PreventiveActionCard action={action} />
         </div>
-        <div className="lg:col-span-5">
-          <TelemetryFeed />
-        </div>
-      </section>
-
-      {/* CORRECTION CHART */}
-      <section>
-        <HydrationVsRiskChart logs={logs} />
-      </section>
-
-      {/* SUPABASE DIAGNOSTIC — colapsado por padrão */}
-      <section>
-        <details className="glass rounded-xl">
-          <summary className="cursor-pointer px-4 py-3 micro-label flex items-center justify-between list-none">
-            <span style={{ color: "var(--neon)" }}>◆ DIAGNÓSTICO DE CONEXÃO</span>
-            <span className="text-[var(--muted-foreground)]">expandir</span>
-          </summary>
-          <div className="px-4 pb-4">
-            <FoodScienceList />
-          </div>
-        </details>
       </section>
     </div>
   );

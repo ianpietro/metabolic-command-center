@@ -67,7 +67,7 @@ export function HeaderBar() {
 function Logo() {
   return (
     <svg width="32" height="32" viewBox="0 0 32 32" className="text-[var(--foreground)]">
-      <circle cx="16" cy="16" r="13" fill="none" stroke="var(--safe)" strokeWidth="1.5" strokeDasharray="50 70" strokeLinecap="round" transform="rotate(135 16 16)" />
+      <circle cx="16" cy="16" r="13" fill="none" stroke="var(--neon)" strokeWidth="1.5" strokeDasharray="50 70" strokeLinecap="round" transform="rotate(135 16 16)" style={{ filter: "drop-shadow(0 0 4px var(--neon))" }} />
       <text x="16" y="21" textAnchor="middle" fontFamily="Inter, system-ui" fontWeight="700" fontSize="14" fill="currentColor">U</text>
       <circle cx="24" cy="9" r="2" fill="var(--crit)" />
     </svg>

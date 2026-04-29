@@ -27,8 +27,8 @@ export function HeaderBar() {
 
         <div className="hidden md:flex items-center gap-3">
           <div className="glass rounded-md px-3 py-1.5 flex items-center gap-2">
-            <Terminal size={12} className="text-[var(--muted-foreground)]" />
-            <span className="micro-label">UA SÉRICO</span>
+            <Terminal size={12} style={{ color: "var(--neon)" }} />
+            <span className="micro-label" style={{ color: "var(--neon)" }}>UA SÉRICO</span>
             <span className="data-num text-sm">{profile.acido_urico_serico?.toFixed(1)}</span>
             <span className="micro-label">MG/DL</span>
           </div>

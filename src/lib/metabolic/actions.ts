@@ -30,7 +30,7 @@ export function nextAction(
         profile?.medicacoes?.colchicina ? "Avaliar dose de Colchicina conforme prescrição" : "Repouso da articulação afetada",
         "Evitar qualquer ingestão de álcool e frutose nas próximas 24h",
       ],
-      primaryCta: { label: "Logar 800ml agora", type: "hydrate", payloadMl: 800 },
+      primaryCta: { label: "Beber 800ml agora", type: "hydrate", payloadMl: 800 },
     };
   }
 
@@ -45,7 +45,7 @@ export function nextAction(
         "Suspender ingestão de frutose e álcool",
         "Caminhada leve por 15min para estimular circulação renal",
       ],
-      primaryCta: { label: "Logar 600ml agora", type: "hydrate", payloadMl: 600 },
+      primaryCta: { label: "Beber 600ml agora", type: "hydrate", payloadMl: 600 },
     };
   }
 
@@ -59,7 +59,7 @@ export function nextAction(
         "Ingerir 500ml de água nos próximos 30min",
         "Manter ingestão regular a cada 60min",
       ],
-      primaryCta: { label: "Logar 500ml agora", type: "hydrate", payloadMl: 500 },
+      primaryCta: { label: "Beber 500ml agora", type: "hydrate", payloadMl: 500 },
     };
   }
 
@@ -73,7 +73,7 @@ export function nextAction(
         "Ingerir 250ml de água a cada 60min",
         "Preferir vegetais alcalinizantes na próxima refeição (espinafre, brócolis)",
       ],
-      primaryCta: { label: "Logar 250ml agora", type: "hydrate", payloadMl: 250 },
+      primaryCta: { label: "Beber 250ml agora", type: "hydrate", payloadMl: 250 },
     };
   }
 
@@ -85,6 +85,6 @@ export function nextAction(
       "Hidratação programada: 250ml a cada 90min",
       "Continuar registrando refeições para precisão da telemetria",
     ],
-    primaryCta: { label: "Logar 250ml", type: "hydrate", payloadMl: 250 },
+    primaryCta: { label: "Beber 250ml", type: "hydrate", payloadMl: 250 },
   };
 }

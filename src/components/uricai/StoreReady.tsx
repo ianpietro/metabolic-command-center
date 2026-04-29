@@ -27,12 +27,11 @@ export function StoreReady({ children, fallback }: { children: React.ReactNode; 
 function BootSplash() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <div className="micro-label mb-3" style={{ color: "var(--safe)" }}>BOOT SEQUENCE</div>
-        <div className="font-mono text-sm text-[var(--muted-foreground)]">
-          <span className="caret">Inicializando núcleo metabólico</span>
-        </div>
-      </div>
+      <div
+        className="h-6 w-6 rounded-full border-2 animate-spin"
+        style={{ borderColor: "var(--line)", borderTopColor: "var(--neon)" }}
+        aria-label="Carregando"
+      />
     </div>
   );
 }

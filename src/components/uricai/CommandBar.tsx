@@ -53,8 +53,8 @@ export function CommandBar() {
   const inline = (
     <form onSubmit={handleAnalyze} className="glass rounded-lg p-3 md:p-4">
       <div className="flex items-center gap-2 mb-2">
-        <Terminal size={14} className="text-[var(--safe)]" />
-        <span className="micro-label">METABOLIC COMMAND BAR</span>
+        <Terminal size={14} style={{ color: "var(--neon)" }} />
+        <span className="micro-label" style={{ color: "var(--neon)" }}>REGISTRAR INGESTÃO</span>
         <span className="micro-label ml-auto hidden md:inline-flex items-center gap-1 border border-[var(--line)] rounded px-1.5 py-0.5">
           <Command size={10} /> K
         </span>

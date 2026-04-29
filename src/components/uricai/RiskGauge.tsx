@@ -39,18 +39,15 @@ export function RiskGauge({ value, band, size = 280 }: Props) {
     return { ...inner, x2: outer.x, y2: outer.y, key: i };
   });
 
-  // viewBox alto o suficiente para conter arco semicircular completo
-  const vbHeight = cy + stroke + 12;
+  // viewBox alto o suficiente para conter arco semicircular + leitura abaixo
+  const totalH = cy + stroke + 12 + size * 0.28;
 
   return (
-    <div
-      className="relative mx-auto"
-      style={{ width: size, height: vbHeight + size * 0.18 }}
-    >
+    <div className="relative mx-auto" style={{ width: size, height: totalH }}>
       <svg
         width={size}
-        height={vbHeight + size * 0.18}
-        viewBox={`0 0 ${size} ${vbHeight + size * 0.18}`}
+        height={totalH}
+        viewBox={`0 0 ${size} ${totalH}`}
         className="overflow-visible block"
       >
         {/* outer faint ring */}

@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TendenciasRouteImport } from './routes/tendencias'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as LogRouteImport } from './routes/log'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 
 const TendenciasRoute = TendenciasRouteImport.update({
@@ -29,6 +30,11 @@ const LogRoute = LogRouteImport.update({
   path: '/log',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -37,12 +43,14 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/log': typeof LogRoute
   '/perfil': typeof PerfilRoute
   '/tendencias': typeof TendenciasRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/log': typeof LogRoute
   '/perfil': typeof PerfilRoute
   '/tendencias': typeof TendenciasRoute
@@ -50,20 +58,22 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/log': typeof LogRoute
   '/perfil': typeof PerfilRoute
   '/tendencias': typeof TendenciasRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/log' | '/perfil' | '/tendencias'
+  fullPaths: '/' | '/auth' | '/log' | '/perfil' | '/tendencias'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/log' | '/perfil' | '/tendencias'
-  id: '__root__' | '/' | '/log' | '/perfil' | '/tendencias'
+  to: '/' | '/auth' | '/log' | '/perfil' | '/tendencias'
+  id: '__root__' | '/' | '/auth' | '/log' | '/perfil' | '/tendencias'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   LogRoute: typeof LogRoute
   PerfilRoute: typeof PerfilRoute
   TendenciasRoute: typeof TendenciasRoute
@@ -92,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LogRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -104,6 +121,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   LogRoute: LogRoute,
   PerfilRoute: PerfilRoute,
   TendenciasRoute: TendenciasRoute,
@@ -111,3 +129,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}

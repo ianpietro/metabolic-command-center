@@ -17,9 +17,46 @@ export const Route = createFileRoute("/log")({
   component: LogPage,
 });
 
+function renderLogText(l: any) {
+  return l.rawText
+    ?? (l.kind === "hydration" ? `${l.hydration_ml}ml de ${l.hydration_type === 'agua' ? 'água' : l.hydration_type}`
+    : l.kind === "symptom" ? `Dor ${l.sintoma_intensidade}/5 (${l.sintoma_articulacao})`
+    : l.kind === "activity" ? `${l.atividade_min}min de exercício ${l.atividade_tipo}`
+    : l.kind === "medication" ? `${l.med_nome} ${l.med_dose_mg}mg`
+    : "—");
+}
+
+function renderLogKind(kind: string) {
+  const map: any = {
+    meal: "Refeição",
+    hydration: "Líquidos",
+    symptom: "Sintoma",
+    activity: "Exercício",
+    medication: "Remédio",
+  };
+  return map[kind] || kind;
+}
+
 function LogPage() {
   const addLog = useMetabolic((s) => s.addLog);
   const logs = useMetabolic((s) => s.logs);
+  const [staged, setStaged] = React.useState<any[]>([]);
+
+  const stageItem = (item: any) => {
+    setStaged((prev) => [...prev, { ...item, _tempId: Math.random().toString() }]);
+  };
+
+  const confirmAll = () => {
+    staged.forEach((item) => {
+      const { _tempId, ...realItem } = item;
+      addLog(realItem);
+    });
+    setStaged([]);
+  };
+
+  const removeStaged = (tempId: string) => {
+    setStaged((prev) => prev.filter((i) => i._tempId !== tempId));
+  };
 
   return (
     <div className="space-y-5 max-w-3xl mx-auto fade-up">
@@ -27,13 +64,37 @@ function LogPage() {
         <span className="micro-label">REGISTRO DE TELEMETRIA</span>
         <h1 className="mt-1 text-2xl md:text-3xl font-semibold tracking-tight">Log Rápido</h1>
         <p className="mt-1 font-mono text-[12px] text-[var(--muted-foreground)]">
-          &gt; Cada entrada recalibra o score de risco em tempo real.
+          &gt; Selecione os itens, revise e depois confirme o envio.
         </p>
       </header>
 
+      {staged.length > 0 && (
+        <section className="glass rounded-lg p-4 border border-[var(--safe)] shadow-[0_0_15px_rgba(45,212,191,0.1)]">
+          <div className="flex justify-between items-center mb-3">
+            <span className="micro-label" style={{ color: "var(--safe)" }}>ITENS SELECIONADOS ({staged.length})</span>
+            <button onClick={confirmAll} className="bg-[var(--safe)] text-black px-4 py-2 rounded-md text-sm font-semibold hover:opacity-90 transition-opacity">
+              Confirmar Envio
+            </button>
+          </div>
+          <ul className="space-y-2">
+            {staged.map((l) => (
+              <li key={l._tempId} className="flex justify-between items-center bg-[var(--background)] p-3 rounded-md font-mono text-[13px] border border-[var(--line)]">
+                <div className="flex items-center gap-3">
+                  <span className="micro-label" style={{ color: "var(--foreground)" }}>{renderLogKind(l.kind)}</span>
+                  <span className="text-[var(--muted-foreground)]">{renderLogText(l)}</span>
+                </div>
+                <button onClick={() => removeStaged(l._tempId)} className="text-[var(--crit)] px-2 py-1 hover:bg-[var(--crit)] hover:text-white rounded transition-colors">
+                  Excluir
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <Section icon={Beef} title="ALIMENTAÇÃO">
-        <MealForm onSubmit={(p) => addLog({ kind: "meal", ...p })} />
-        <CategoryGrid onPick={(food) => addLog({
+        <MealForm onSubmit={(p) => stageItem({ kind: "meal", ...p })} />
+        <CategoryGrid onPick={(food) => stageItem({
           kind: "meal", rawText: food.aliases[0],
           purinas_mg: food.purinas * 1.5, // 150g
           frutose_g: food.frutose * 1.5,
@@ -43,19 +104,19 @@ function LogPage() {
       </Section>
 
       <Section icon={Droplet} title="HIDRATAÇÃO">
-        <HydrationForm onSubmit={(ml, type) => addLog({ kind: "hydration", hydration_ml: ml, hydration_type: type })} />
+        <HydrationForm onSubmit={(ml, type) => stageItem({ kind: "hydration", hydration_ml: ml, hydration_type: type })} />
       </Section>
 
       <Section icon={Stethoscope} title="SINTOMAS">
-        <SymptomForm onSubmit={(intensity, joint) => addLog({ kind: "symptom", sintoma_intensidade: intensity, sintoma_articulacao: joint })} />
+        <SymptomForm onSubmit={(intensity, joint) => stageItem({ kind: "symptom", sintoma_intensidade: intensity, sintoma_articulacao: joint })} />
       </Section>
 
       <Section icon={Activity} title="ATIVIDADE FÍSICA">
-        <ActivityForm onSubmit={(tipo, min) => addLog({ kind: "activity", atividade_tipo: tipo, atividade_min: min })} />
+        <ActivityForm onSubmit={(tipo, min) => stageItem({ kind: "activity", atividade_tipo: tipo, atividade_min: min })} />
       </Section>
 
       <Section icon={Pill} title="MEDICAÇÕES">
-        <MedForm onSubmit={(name, dose) => addLog({ kind: "medication", med_nome: name, med_dose_mg: dose })} />
+        <MedForm onSubmit={(name, dose) => stageItem({ kind: "medication", med_nome: name, med_dose_mg: dose })} />
       </Section>
 
       <RecentLogs logs={logs} />
@@ -99,7 +160,7 @@ function MealForm({ onSubmit }: { onSubmit: (p: { rawText: string; purinas_mg: n
         placeholder="Ex: 200g picanha + 1 cerveja"
         className="flex-1 bg-[var(--background)] border border-[var(--line)] rounded-md px-3 py-2 font-mono text-sm outline-none focus:border-[var(--safe)]"
       />
-      <button className="rounded-md bg-[var(--foreground)] text-[var(--background)] px-4 py-2 text-sm font-medium">Registrar</button>
+      <button className="rounded-md bg-[var(--foreground)] text-[var(--background)] px-4 py-2 text-sm font-medium">Adicionar</button>
     </form>
   );
 }
@@ -191,7 +252,7 @@ function SymptomForm({ onSubmit }: { onSubmit: (intensity: number, joint: any) =
           <button key={j} onClick={() => setJoint(j)} className={["rounded-md border px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em]", joint === j ? "border-[var(--crit)] text-[var(--crit)]" : "border-[var(--line)] text-[var(--muted-foreground)]"].join(" ")}>{j}</button>
         ))}
       </div>
-      <button onClick={() => onSubmit(intensity, joint)} className="rounded-md bg-[var(--foreground)] text-[var(--background)] px-4 py-2 text-sm font-medium">Registrar sintoma</button>
+      <button onClick={() => onSubmit(intensity, joint)} className="rounded-md bg-[var(--foreground)] text-[var(--background)] px-4 py-2 text-sm font-medium">Adicionar</button>
     </div>
   );
 }
@@ -209,7 +270,7 @@ function ActivityForm({ onSubmit }: { onSubmit: (tipo: "leve" | "moderada" | "in
       <div className="flex items-center gap-2">
         <input type="number" value={min} onChange={(e) => setMin(parseInt(e.target.value) || 0)} className="w-24 bg-[var(--background)] border border-[var(--line)] rounded-md px-2 py-2 font-mono text-sm outline-none" />
         <span className="micro-label">MIN</span>
-        <button onClick={() => onSubmit(tipo, min)} className="ml-auto rounded-md bg-[var(--foreground)] text-[var(--background)] px-4 py-2 text-sm font-medium">Registrar</button>
+        <button onClick={() => onSubmit(tipo, min)} className="ml-auto rounded-md bg-[var(--foreground)] text-[var(--background)] px-4 py-2 text-sm font-medium">Adicionar</button>
       </div>
     </div>
   );
@@ -250,14 +311,9 @@ function RecentLogs({ logs }: { logs: any[] }) {
             <span className="text-[var(--muted-foreground)] w-16">
               {new Date(l.timestamp).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
             </span>
-            <span className="micro-label w-20" style={{ color: "var(--safe)" }}>{l.kind}</span>
+            <span className="micro-label w-20" style={{ color: "var(--safe)" }}>{renderLogKind(l.kind)}</span>
             <span className="text-[var(--foreground)] truncate">
-              {l.rawText
-                ?? (l.kind === "hydration" ? `${l.hydration_ml}ml ${l.hydration_type}`
-                : l.kind === "symptom" ? `${l.sintoma_intensidade}/5 ${l.sintoma_articulacao}`
-                : l.kind === "activity" ? `${l.atividade_tipo} ${l.atividade_min}min`
-                : l.kind === "medication" ? `${l.med_nome} ${l.med_dose_mg}mg`
-                : "—")}
+              {renderLogText(l)}
             </span>
           </li>
         ))}

@@ -7,16 +7,20 @@ type Props = {
 };
 
 /**
- * Gauge semicircular (180°). Container tem altura suficiente para arco + leitura
- * central, evitando sobreposição entre o número de risco e o traçado do arco.
+ * Gauge em arco de 240° abrindo para baixo (estilo velocímetro).
+ * Leitura central (RISCO / valor / banda) ocupa o "vão" interno do arco
+ * sem cruzar o traçado.
  */
 export function RiskGauge({ value, band, size = 280 }: Props) {
   const stroke = 14;
   const cx = size / 2;
-  const cy = size * 0.48; // arco centralizado verticalmente no topo
-  const r = size / 2 - stroke - 14;
-  const startAngle = 180;
-  const endAngle = 360;
+  const cy = size / 2;
+  const r = size / 2 - stroke - 12;
+
+  // Arco de 240° centrado no topo: começa em 150°, termina em 390° (=30°)
+  // Em coordenadas SVG (0° = topo), o vão de 120° fica voltado pra baixo.
+  const startAngle = 150;
+  const endAngle = 390;
   const range = endAngle - startAngle;
 
   const v = Math.max(0, Math.min(100, value));
@@ -31,7 +35,6 @@ export function RiskGauge({ value, band, size = 280 }: Props) {
         ? "var(--warn)"
         : "var(--crit)";
 
-  // Tick marks só nos extremos e no quartil
   const ticks = Array.from({ length: 9 }, (_, i) => {
     const a = startAngle + (i / 8) * range;
     const inner = polar(cx, cy, r - stroke / 2 - 4, a);
@@ -39,18 +42,15 @@ export function RiskGauge({ value, band, size = 280 }: Props) {
     return { ...inner, x2: outer.x, y2: outer.y, key: i };
   });
 
-  // viewBox alto o suficiente para conter arco semicircular + leitura abaixo
-  const totalH = cy + stroke + 12 + size * 0.28;
+  // Container: arco completo cabe em altura == size (já que cy = size/2 e r < size/2).
+  // O vão inferior do arco (entre as duas pontas) é onde colocamos o readout.
+  const innerTop = cy - r * 0.35; // posição do "RISCO 12H"
+  const labelEnds = [polar(cx, cy, r + 18, startAngle), polar(cx, cy, r + 18, endAngle)];
 
   return (
-    <div className="relative mx-auto" style={{ width: size, height: totalH }}>
-      <svg
-        width={size}
-        height={totalH}
-        viewBox={`0 0 ${size} ${totalH}`}
-        className="overflow-visible block"
-      >
-        {/* outer faint ring */}
+    <div className="relative mx-auto" style={{ width: size, height: size }}>
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="block overflow-visible">
+        {/* anel pontilhado externo neon */}
         <circle
           cx={cx}
           cy={cy}
@@ -92,13 +92,10 @@ export function RiskGauge({ value, band, size = 280 }: Props) {
           }}
         />
 
-        {/* center dot */}
-        <circle cx={cx} cy={cy} r={4} fill="var(--background)" stroke="var(--neon)" strokeWidth={1.5} />
-
-        {/* labels at extremes — recuados pra fora do arco */}
+        {/* labels 0/100 nos extremos do arco */}
         <text
-          x={polar(cx, cy, r + 18, startAngle).x}
-          y={polar(cx, cy, r + 18, startAngle).y + 4}
+          x={labelEnds[0].x}
+          y={labelEnds[0].y + 4}
           textAnchor="middle"
           className="font-mono"
           fontSize="10"
@@ -108,8 +105,8 @@ export function RiskGauge({ value, band, size = 280 }: Props) {
           0
         </text>
         <text
-          x={polar(cx, cy, r + 18, endAngle).x}
-          y={polar(cx, cy, r + 18, endAngle).y + 4}
+          x={labelEnds[1].x}
+          y={labelEnds[1].y + 4}
           textAnchor="middle"
           className="font-mono"
           fontSize="10"
@@ -120,10 +117,10 @@ export function RiskGauge({ value, band, size = 280 }: Props) {
         </text>
       </svg>
 
-      {/* center readout — posicionado abaixo do arco semicircular */}
+      {/* leitura central — dentro do "vão" do arco, sem cruzar o traçado */}
       <div
         className="pointer-events-none absolute inset-x-0 flex flex-col items-center"
-        style={{ top: cy + 8 }}
+        style={{ top: innerTop }}
       >
         <span className="micro-label" style={{ color: "var(--neon)" }}>RISCO 12H</span>
         <span

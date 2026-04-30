@@ -9,26 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SimuladorRouteImport } from './routes/simulador'
 import { Route as PerfilRouteImport } from './routes/perfil'
-import { Route as MetricasRouteImport } from './routes/metricas'
 import { Route as LogRouteImport } from './routes/log'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
 
-const SimuladorRoute = SimuladorRouteImport.update({
-  id: '/simulador',
-  path: '/simulador',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const PerfilRoute = PerfilRouteImport.update({
   id: '/perfil',
   path: '/perfil',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MetricasRoute = MetricasRouteImport.update({
-  id: '/metricas',
-  path: '/metricas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LogRoute = LogRouteImport.update({
@@ -51,72 +39,43 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/log': typeof LogRoute
-  '/metricas': typeof MetricasRoute
   '/perfil': typeof PerfilRoute
-  '/simulador': typeof SimuladorRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/log': typeof LogRoute
-  '/metricas': typeof MetricasRoute
   '/perfil': typeof PerfilRoute
-  '/simulador': typeof SimuladorRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/log': typeof LogRoute
-  '/metricas': typeof MetricasRoute
   '/perfil': typeof PerfilRoute
-  '/simulador': typeof SimuladorRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/log' | '/metricas' | '/perfil' | '/simulador'
+  fullPaths: '/' | '/auth' | '/log' | '/perfil'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/log' | '/metricas' | '/perfil' | '/simulador'
-  id:
-    | '__root__'
-    | '/'
-    | '/auth'
-    | '/log'
-    | '/metricas'
-    | '/perfil'
-    | '/simulador'
+  to: '/' | '/auth' | '/log' | '/perfil'
+  id: '__root__' | '/' | '/auth' | '/log' | '/perfil'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
   LogRoute: typeof LogRoute
-  MetricasRoute: typeof MetricasRoute
   PerfilRoute: typeof PerfilRoute
-  SimuladorRoute: typeof SimuladorRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/simulador': {
-      id: '/simulador'
-      path: '/simulador'
-      fullPath: '/simulador'
-      preLoaderRoute: typeof SimuladorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/perfil': {
       id: '/perfil'
       path: '/perfil'
       fullPath: '/perfil'
       preLoaderRoute: typeof PerfilRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/metricas': {
-      id: '/metricas'
-      path: '/metricas'
-      fullPath: '/metricas'
-      preLoaderRoute: typeof MetricasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/log': {
@@ -147,9 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
   LogRoute: LogRoute,
-  MetricasRoute: MetricasRoute,
   PerfilRoute: PerfilRoute,
-  SimuladorRoute: SimuladorRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
